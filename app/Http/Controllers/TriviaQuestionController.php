@@ -110,6 +110,7 @@ class TriviaQuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function random(){
-        return TriviaQuestion::inRandomOrder()->first();
+        return TriviaQuestion::all()->random(1);
+        #inRandomOrder()->first();
     }
 }
