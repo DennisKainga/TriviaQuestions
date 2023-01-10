@@ -14,7 +14,7 @@ class TriviaQuestionController extends Controller
      */
     public function index(){
 
-        return TriviaQuestion::select('id','category','difficulty','question','correct_answer','incorrect_answers')->get();
+        return TriviaQuestion::select('id','category','difficulty','question','correct_answer','incorrect_answers')->paginate(1);
         //
     }
 
@@ -71,20 +71,19 @@ class TriviaQuestionController extends Controller
 
         $trivialquestion->update($validated_data);
         
-        if($trivialquestion->isDirty()){
+        if($trivialquestion->wasChanged()){
             return response()->json([
                 'message' => 'Record updated',
-                'data'=>$trivialquestion
+                'new_data'=>$trivialquestion,
+                'old_data'=>$trivialquestion->getOriginal() 
             ], 200);
         }
-
-        if($trivialquestion->isClean()){
-            return response()->json([
-                'message' => 'Record not updated',
-                'data'=>$trivialquestion
-            ], 200);
+        return response()->json([
+            'message' => 'Record not updated',
+            'data'=>$trivialquestion
+        ], 200);
             
-        }
+        
     }
 
     /**
@@ -94,7 +93,23 @@ class TriviaQuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(TriviaQuestion $trivialquestion){
-        $trivialquestion->delete();
-        //
+       $trivialquestion->delete();
+       
+        return response()->json([
+            'message' => [
+                'question'=>$trivialquestion->getOriginal('question'),
+                'action'=>'Deleted']
+        ], 200);
+
+       
+    }
+    /**
+     * Get random triviaQuestion
+     *
+     * @param  App\Models\TriviaQuestion
+     * @return \Illuminate\Http\Response
+     */
+    public function random(){
+        return TriviaQuestion::inRandomOrder()->first();
     }
 }

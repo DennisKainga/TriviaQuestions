@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TriviaQuestionController;
+use App\Models\TriviaQuestion;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +15,10 @@ use App\Http\Controllers\TriviaQuestionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+Route::get('/',[TriviaQuestionController::class,'random']);
+
 Route::prefix('trivia_questions')->group(function(){
 
     Route::get('/',[TriviaQuestionController::class,'index']);
@@ -22,6 +28,8 @@ Route::prefix('trivia_questions')->group(function(){
     Route::get('/{trivialquestion}',[TriviaQuestionController::class, 'show']);
 
     Route::put('/{trivialquestion}', [TriviaQuestionController::class, 'update']);
+
+    Route::delete('/{trivialquestion}', [TriviaQuestionController::class, 'destroy']);
 
 });
 
