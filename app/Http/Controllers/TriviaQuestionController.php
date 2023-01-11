@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\StoreTriviaRequest;
+use App\Http\Resources\TriviaQuestionCollection;
+use App\Http\Resources\TriviaQuestionResource;
 use App\Models\TriviaQuestion;
 
 
-class TriviaQuestionController extends Controller
-{
+class TriviaQuestionController extends Controller{
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(){
-
-        return TriviaQuestion::select('id','category','difficulty','question','correct_answer','incorrect_answers')->paginate(1);
-        //
+        return new TriviaQuestionCollection(TriviaQuestion::paginate(1));
     }
 
     /**
@@ -45,6 +45,7 @@ class TriviaQuestionController extends Controller
     
     }
 
+   
     /**
      * Display the specified resource.
      *
@@ -52,10 +53,11 @@ class TriviaQuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(TriviaQuestion $trivialquestion){
-    
-        return $trivialquestion;
-        // return $trivialquestion;
+
+        return new TriviaQuestionResource($trivialquestion);
+
     }
+
 
     /**
      * Update the specified resource in storage.
